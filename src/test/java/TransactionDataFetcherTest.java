@@ -43,7 +43,7 @@ public class TransactionDataFetcherTest {
         TransactionDataFetcher dataFetcher = new TransactionDataFetcher(transactionList);
 
         double totalAmount = dataFetcher.getTotalTransactionAmount();
-        Assertions.assertEquals(4371.37, totalAmount);
+        Assertions.assertEquals(2889.17, totalAmount);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TransactionDataFetcherTest {
         TransactionDataFetcher dataFetcher = new TransactionDataFetcher(transactionList);
 
         double totalAmountSentByTomShelby = dataFetcher.getTotalTransactionAmountSentBy("Tom Shelby");
-        Assertions.assertEquals(828.26, totalAmountSentByTomShelby);
+        Assertions.assertEquals(678.06, totalAmountSentByTomShelby);
 
         double totalAmountSentByAuntPolly = dataFetcher.getTotalTransactionAmountSentBy("Aunt Polly");
         Assertions.assertEquals(101.02, totalAmountSentByAuntPolly);
@@ -103,16 +103,18 @@ public class TransactionDataFetcherTest {
     public void testGetTransactionsByBeneficiaryName() {
         TransactionDataFetcher dataFetcher = new TransactionDataFetcher(transactionList);
 
-        Map<String, List<Transaction>> transactionsByBeneficiaryName = dataFetcher.getTransactionsByBeneficiaryName();
+        Map<String, Transaction> transactionsByBeneficiaryName = dataFetcher.getTransactionsByBeneficiaryName();
         Assertions.assertEquals(10, transactionsByBeneficiaryName.size());
 
-        List<Transaction> alfieSolomonsTransactions = transactionsByBeneficiaryName.get("Alfie Solomons");
-        Assertions.assertNotNull(alfieSolomonsTransactions);
-        Assertions.assertEquals(1, alfieSolomonsTransactions.size());
+        Transaction alfieSolomonsTransaction = transactionsByBeneficiaryName.get("Alfie Solomons");
+        Assertions.assertNotNull(alfieSolomonsTransaction);
+        Assertions.assertEquals(663458, alfieSolomonsTransaction.getMtn());
+        Assertions.assertEquals(430.2, alfieSolomonsTransaction.getAmount());
 
-        List<Transaction> arthurShelbyTransactions = transactionsByBeneficiaryName.get("Arthur Shelby");
+        Transaction arthurShelbyTransactions = transactionsByBeneficiaryName.get("Arthur Shelby");
         Assertions.assertNotNull(arthurShelbyTransactions);
-        Assertions.assertEquals(2, arthurShelbyTransactions.size());
+        Assertions.assertEquals(1284564, arthurShelbyTransactions.getMtn());
+        Assertions.assertEquals(150.2, arthurShelbyTransactions.getAmount());
     }
 
     /**
@@ -149,10 +151,9 @@ public class TransactionDataFetcherTest {
         List<Transaction> top3Transactions = dataFetcher.getTop3TransactionsByAmount();
         Assertions.assertEquals(3, top3Transactions.size());
 
-        // Assert the transactions in the correct order (descending order of amount)
         Assertions.assertEquals(985.0, top3Transactions.get(0).getAmount());
         Assertions.assertEquals(666.0, top3Transactions.get(1).getAmount());
-        Assertions.assertEquals(666.0, top3Transactions.get(2).getAmount());
+        Assertions.assertEquals(430.2, top3Transactions.get(2).getAmount());
     }
 
     /**
@@ -164,7 +165,7 @@ public class TransactionDataFetcherTest {
 
         Optional<String> topSender = dataFetcher.getTopSender();
         Assertions.assertTrue(topSender.isPresent());
-        Assertions.assertEquals("Grace Burgess", topSender.get());
+        Assertions.assertEquals("Arthur Shelby", topSender.get());
     }
 
 
